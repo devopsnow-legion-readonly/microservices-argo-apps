@@ -29,13 +29,13 @@ spec:
               exit 1
           fi
         name: frontend-check
-        image: gcr.io/google-containers/busybox:latest
+        image: busybox:latest
         env:
         - name: FRONTEND_ADDR
-          value: "frontend:80"
+          value: "abc52dbf74fb84284ba5c0d8c9e65758-14054556.ap-south-1.elb.amazonaws.com:80"
       containers:
       - name: main
-        image: registry.devopsnow.io/public/opentelemetry-microservices-demo/loadgenerator:1
+        image: gcr.io/google-samples/microservices-demo/loadgenerator:v0.2.4
         env:
         - name: FRONTEND_ADDR
           value: "frontend:80"
