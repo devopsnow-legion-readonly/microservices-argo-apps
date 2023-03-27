@@ -15,7 +15,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: gcr.io/google-samples/microservices-demo/adservice:v0.2.4
+        image: registry.devopsnow.io/public/opentelemetry-microservices-demo/adservice:1
         ports:
         - containerPort: 9555
         env:
@@ -25,22 +25,24 @@ spec:
         #   value: "1"
         # - name: DISABLE_TRACING
         #   value: "1"
-        - name: JAEGER_SERVICE_ADDR
-          value: "otel-collector.devopsnow:14268"
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: "http://otel-collector.devopsnow.svc.cluster.local:4317"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=adservice,service.version=1.0.0"
         resources:
           requests:
-            cpu: 200m
-            memory: 180Mi
+            cpu: 400m
+            memory: 360Mi
           limits:
-            cpu: 300m
-            memory: 300Mi
+            cpu: 600m
+            memory: 600Mi
         readinessProbe:
-          initialDelaySeconds: 20
+          initialDelaySeconds: 60
           periodSeconds: 15
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:9555"]
         livenessProbe:
-          initialDelaySeconds: 20
+          initialDelaySeconds: 60
           periodSeconds: 15
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:9555"]
